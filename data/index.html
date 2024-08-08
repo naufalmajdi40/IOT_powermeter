@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>DAS POWER</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+  <div class="topnav">
+    <a class="active" href="/">CONFIG</a>
+    <a href="/live">LIVE</a>
+    <a href="#" onclick="logout()">LOGOUT</a>
+  </div>
+
+<br>
+    <form action="/saveConfig" method="post" id="configForm">
+    <div class="card" style="width: 70%;margin:auto";>
+    <div class="container" >
+      <H3>MODBUS Config</H3>
+      <label for="kode">Kode Device</label>
+        <input type="text" id="kode" name="kode" disabled required>  
+      <label for="id">ID</label>
+        <input type="number" id="id" name="id" required>
+        <label for="baudrate">baudrate</label>
+        <select id="baud" name="baud" form="configForm">
+          <option value="300">300</option>
+          <option value="600">600</option>
+          <option value="1200">1200</option>
+          <option value="2400">2400</option>
+          <option value="4800">4800</option>
+          <option value="9600">9600</option>
+          <option value="14400">14400</option>
+          <option value="19200">19200</option>
+          <option value="28800">28800</option>
+          <option value="38400">38400</option>
+          <option value="57600">57600</option>
+          <option value="115200">115200</option>
+          </select>
+        <label for="serial">Serial Format</label>
+        <select  id="serial" name="serial" form="configForm" required>
+          <option value="SERIAL_5N1">SERIAL_5N1</option>
+          <option value="SERIAL_6N1">SERIAL_6N1</option>
+          <option value="SERIAL_7N1">SERIAL_7N1</option>
+          <option value="SERIAL_8N1">SERIAL_8N1</option>
+          <option value="SERIAL_5N2">SERIAL_5N2</option>
+          <option value="SERIAL_6N2">SERIAL_6N2</option>
+          <option value="SERIAL_7N2">SERIAL_7N2</option>
+          <option value="SERIAL_8N2">SERIAL_8N2</option>
+          <option value="SERIAL_5E1">SERIAL_5E1</option>
+          <option value="SERIAL_6E1">SERIAL_6E1</option>
+          <option value="SERIAL_7E1">SERIAL_7E1</option>
+          <option value="SERIAL_8E1">SERIAL_8E1</option>
+          <option value="SERIAL_5E2">SERIAL_5E2</option>
+          <option value="SERIAL_6E2">SERIAL_6E2</option>
+          <option value="SERIAL_7E2">SERIAL_7E2</option>
+          <option value="SERIAL_8E2">SERIAL_8E2</option>
+          <option value="SERIAL_5O1">SERIAL_5O1</option>
+          <option value="SERIAL_6O1">SERIAL_6O1</option>
+          <option value="SERIAL_7O1">SERIAL_7O1</option>
+          <option value="SERIAL_8O1">SERIAL_8O1</option>
+          <option value="SERIAL_5O2">SERIAL_5O2</option>
+          <option value="SERIAL_6O2">SERIAL_6O2</option>
+          <option value="SERIAL_7O2">SERIAL_7O2</option>
+          <option value="SERIAL_8O2">SERIAL_8O2</option>
+          </select>
+
+        <h3>ETHERNET CONFIG</h3>
+        <label for="mode">mode</label>
+        <select id="mode" name="mode" id="mode"form="configForm" required>
+          <option value="0">DHCP</option>
+          <option value="1">STATIC</option>
+        </select>
+        <label for="IP ADDRESS">IP ADDRESS</label>
+        <input type="text" id="ip" name ="ip" class="input-box" placeholder="xxx.xxx.xxx.xx" autocomplete="off" required />
+
+        <label for="gtw">GATEWAY</label>
+        <input type="text" id="gtw" name ="gtw" class="input-box" placeholder="xxx.xxx.xxx.xx" autocomplete="off" required/>
+
+        <label for="netmask">NETMASK</label>
+        <input type="text" id="netmask" name ="netmask" class="input-box" placeholder="xxx.xxx.xxx.xx" autocomplete="off" required/>
+
+        <label for="dns">DNS</label>
+        <input type="text" id="dns" name ="dns" class="input-box" placeholder="xxx.xxx.xxx.xx" autocomplete="off" required/>
+
+
+        <h3>MQTT Config</h3>
+        <label for="server">MQTT Server</label>
+        <input type="text" id="mqttServer" name="mqttServer" placeholder="Server name.." required>
+        <label for="intv">PORT</label>
+        <input type="number" id="port" name="port"  required>
+        <label for="mqttName">MQTT Name</label>
+        <input type="text" id="mqttName" name="mqttName" placeholder="mqtt name.." required>
+        <label for="mqttpass">MQTT PASSWORD</label>
+        <input type="password" id="mqttPass" name="mqttPass" required>
+          <label for="intv">INTERVAL(ms)</label>
+        <input type="number" id="interval" name="interval" required>
+       
+      <input type="submit"  value="Save">
+    </form>
+  </div>
+</div>
+</body>
+<script>
+  function logout(){
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "/logout", true);
+    xhr.send();
+    setTimeout(function(){ window.open("/logout-web","_self"); }, 1000);
+  }
+const url ="/JsonConfig"
+  async function bacaConfig() {
+    let response = await fetch(url);
+    if (response.status === 200) {
+        let data = await response.text();
+        dtJSON = JSON.parse(data)
+        document.getElementById("kode").value=dtJSON.kode;
+        document.getElementById("id").value=dtJSON.id;
+        document.getElementById("baud").value=dtJSON.baud;
+        document.getElementById("serial").value=dtJSON.serial;
+        document.getElementById("mode").value=dtJSON.mode;
+        document.getElementById("ip").value=dtJSON.ip;
+        document.getElementById("gtw").value=dtJSON.gtw;
+        document.getElementById("netmask").value=dtJSON.netmask;
+        document.getElementById("dns").value=dtJSON.dns;
+        document.getElementById("mqttServer").value=dtJSON.mqttServer;
+        document.getElementById("port").value=dtJSON.port;
+        document.getElementById("mqttName").value=dtJSON.mqttName;
+        document.getElementById("mqttPass").value=dtJSON.mqttPass;
+        document.getElementById("interval").value=dtJSON.interval;
+        //alert(data);  
+      }
+}
+bacaConfig()
+ // setInterval(bacaSensor,3000)  
+</script>
+</html>

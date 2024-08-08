@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>DAS POWER</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+  <div class="topnav">
+    <a  href="/">CONFIG</a>
+    <a class="active" href="/live">LIVE</a>
+    <a href="#" onclick="logout()">LOGOUT</a>
+  </div>
+  
+  <div style="padding-left:16px">
+    <h2>Live Monitoring</h2>
+  </div>
+  <div class="flex-container">
+  <div class="card">
+    <div class="container">
+      <h4><b>Frequency (HZ)</b></h4> 
+      <p id="F">0</p> 
+    </div>
+  </div>
+  
+  <div class="card">
+    <div class="container">
+      <h4><b> Voltage R-N</b></h4> 
+      <p id="VRN">0</p> 
+    </div>
+  </div>
+  <div class="card">
+    <div class="container">
+      <h4><b>Voltage S-N</b></h4> 
+      <p id="VSN">0</p> 
+    </div>
+  </div>
+  <div class="card">
+    <div class="container">
+      <h4><b>Voltage T-N</b></h4> 
+      <p id="VTN">0</p> 
+    </div>
+  </div>
+  <div class="card">
+    <div class="container">
+      <h4><b>Voltage AVG</b></h4> 
+      <p id="VAVG">0</p> 
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="container">
+      <h4><b>Voltage R-S</b></h4> 
+      <p id="VRS">0</p> 
+    </div>
+  </div>
+  <div class="card">
+    <div class="container">
+      <h4><b>Voltage S-T</b></h4> 
+      <p id="VST">0</p> 
+    </div>
+  </div>
+  <div class="card">
+    <div class="container">
+      <h4><b>Voltage R-T</b></h4> 
+      <p id="VRT">0</p> 
+    </div>
+  </div>
+  <div class="card">
+    <div class="container">
+      <h4><b>Current R</b></h4> 
+      <p id="IR">0</p> 
+    </div>
+  </div>
+  <div class="card">
+    <div class="container">
+      <h4><b>Current S</b></h4> 
+      <p id="IS">0</p> 
+    </div>
+  </div>
+  <div class="card">
+    <div class="container">
+      <h4><b>Current T</b></h4> 
+      <p id="IT">0</p> 
+    </div>
+  </div>
+  
+  <div class="card">
+    <div class="container">
+      <h4><b>Current N</b></h4> 
+      <p id="IN">0</p> 
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="container">
+      <h4><b>Power Factor R</b></h4> 
+      <p id="PFR">0</p> 
+    </div>
+  </div>
+  <div class="card">
+    <div class="container">
+      <h4><b>Power Factor S</b></h4> 
+      <p id="PFS">0</p> 
+    </div>
+  </div>
+  <div class="card">
+    <div class="container">
+      <h4><b>Power Factor T</b></h4> 
+      <p id="PFT">0</p> 
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
+
+<script>
+  const url ="/JsonData"
+  async function bacaSensor() {
+    let response = await fetch(url);
+    if (response.status === 200) {
+
+        let data = await response.text();
+        dtJSON = JSON.parse(data)
+        document.getElementById('F').innerHTML=dtJSON.F.toFixed(3);
+        document.getElementById('VRN').innerHTML=dtJSON.VRN.toFixed(3);
+        document.getElementById('VSN').innerHTML=dtJSON.VSN.toFixed(3);
+        document.getElementById('VTN').innerHTML=dtJSON.VTN.toFixed(3);
+        document.getElementById('VAVG').innerHTML=dtJSON.VAVG.toFixed(3);
+        document.getElementById('VRS').innerHTML=dtJSON.VRS.toFixed(3);
+        document.getElementById('VST').innerHTML=dtJSON.VST.toFixed(3);
+        document.getElementById('VRT').innerHTML=dtJSON.VRT.toFixed(3);
+        
+        document.getElementById('IR').innerHTML=dtJSON.IR.toFixed(3);
+        document.getElementById('IS').innerHTML=dtJSON.IS.toFixed(3);
+        document.getElementById('IT').innerHTML=dtJSON.IT.toFixed(3);
+        document.getElementById('IN').innerHTML=dtJSON.IN.toFixed(3);
+        document.getElementById('PFR').innerHTML=dtJSON.PFR.toFixed(3);
+        document.getElementById('PFS').innerHTML=dtJSON.PFS.toFixed(3);
+        document.getElementById('PFT').innerHTML=dtJSON.PFT.toFixed(3);
+      }
+}
+function logout(){
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "/logout", true);
+    xhr.send();
+    setTimeout(function(){ window.open("/logout-web","_self"); }, 1000);
+  }
+bacaSensor()
+  setInterval(bacaSensor,5000)
+</script>
